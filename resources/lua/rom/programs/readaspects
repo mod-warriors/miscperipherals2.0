@@ -1,0 +1,62 @@
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+args = {...}
+if #args < 1 or (args[1] ~= "front" and args[1] ~= "top" and args[1] ~= "bottom") then
+  print("Usage: readaspects front|top|bottom")
+  return
+end
+
+thaumScanner, thaumScannerSide = miscperipheralsutil.getPeripheral("thaumScanner")
+if thaumScanner == nil then
+  print("No Thaum Scanner peripheral found")
+  return
+end
+
+print("Using Thaum Scanner peripheral on "..thaumScannerSide)
+
+print("Starting in 5 seconds - press any key to exit.")
+sleep(5)
+
+while true do
+  timer = os.startTimer(2)
+  event, param = os.pullEvent()
+  if event == "key" then
+    break
+  elseif event == "timer" then
+    if param == timer then
+      if args[1] == "front" then
+        readAspects = thaumScanner.getAspects()
+      elseif args[1] == "top" then
+        readAspects = thaumScanner.getAspectsUp()
+      elseif args[1] == "bottom" then
+        readAspects = thaumScanner.getAspectsDown()
+      end
+      
+      aspects = miscperipheralsutil.sort(readAspects, function(k1, v1, k2, v2) return v1 > v2 end)
+      
+      baseX = 1
+      baseY = 1
+      term.clear()
+      
+      for _, value in ipairs(aspects) do
+        aspect = value[1]
+        amount = value[2]
+        
+        _, sy = term.getSize()
+        if baseY > sy then
+          baseX = baseX + 17
+          baseY = 1
+        end
+        
+        term.setCursorPos(baseX, baseY)
+        term.write(tostring(amount):sub(1,3))
+        term.setCursorPos(baseX + 3, baseY)
+        term.write(aspect)
+        
+        baseY = baseY + 1
+      end
+      
+      term.setCursorPos(1, 1)
+    end
+  end
+end

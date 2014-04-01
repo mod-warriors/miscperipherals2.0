@@ -1,0 +1,63 @@
+-- Use convertnbs to convert .nbs files to .sng files.
+
+-- Load API
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+-- Parse arguments
+args = {...}
+if #args < 1 then
+  print("Usage: playsng filename")
+  print("Plays a .sng file converted using convertnbs.")
+  return
+end
+
+-- Get file
+filename = table.concat(args, " ")
+file = fs.open(filename, "r")
+if not file then
+  print("File not found: "..filename)
+  return
+end
+
+-- Get note blocks
+noteBlocks, noteBlockSides = miscperipheralsutil.getPeripherals("note")
+if #noteBlocks < 1 then
+  print("No Iron Note Block peripherals found")
+  return
+end
+
+print("Using Iron Note Block peripherals on "..table.concat(noteBlockSides, ", "))
+print("")
+
+-- Load song
+song = textutils.unserialize(file.readAll())
+
+if song["title"] == nil then
+  error("Invalid song file")
+end
+
+print(song["title"])
+print(song["author"])
+print(song["originalAuthor"])
+print(song["description"])
+print("")
+term.write("0 / "..song["length"].." t")
+
+-- Play song
+ticker = 1
+for i = 1, #song["song"] do
+  for j = 1, #song["song"][i], 2 do
+    noteBlocks[ticker].playNote(song["song"][i][j], song["song"][i][j + 1])
+    ticker = ticker + 1
+    if ticker > #noteBlocks then ticker = 1 end
+  end
+  sleep(song["interval"])
+  
+  if i % 5 == 0 then
+    x, y = term.getCursorPos()
+    term.setCursorPos(1, y)
+    term.write(i.." / "..song["length"].." t")
+  end
+end
+
+print("")

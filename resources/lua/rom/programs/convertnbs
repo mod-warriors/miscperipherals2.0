@@ -1,0 +1,121 @@
+-- NBS file format documentation: http://www.stuffbydavid.com/nbs
+-- Only parts 1 and 2 are used here.
+
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+instrumentMap = {[0]=0, [1]=4, [2]=1, [3]=2, [4]=3}
+
+-- Parse arguments
+args = {...}
+if #args < 1 then
+  print("Usage: convertnbs filename")
+  print("Converts a Note Block Studio (.nbs) file to a .sng file for playback with playsng.")
+  return
+end
+
+-- Get file
+filename = table.concat(args, " ")
+file = fs.open(filename, "rb")
+if not file then
+  print("File not found: "..filename)
+  return
+end
+
+-- Helper functions for reading values from the file (in little endian!)
+function readShort(f)
+  return f.read() + f.read() * 256
+end
+
+function readInt(f)
+  return readShort(f) + f.read() * 65536 + f.read() * 16777216
+end
+
+function readString(f) -- int length + char payload
+  count = readInt(f)
+  ret = ""
+  for i = 1, count do
+    char = string.char(f.read())
+    if char == "\r" then char = "\n" end -- for some weird reason, NBS uses CR as line break
+    ret = ret..char
+  end
+  return ret
+end
+
+-- Initialize song
+song = {}
+
+-- Part 1: metadata
+song["length"] = readShort(file)
+song["height"] = readShort(file)
+song["title"] = readString(file)
+song["author"] = readString(file)
+song["originalAuthor"] = readString(file)
+song["description"] = readString(file)
+song["tempo"] = readShort(file) / 100
+song["interval"] = 1 / song["tempo"] -- sleep between ticks, saves computation
+song["autoSave"] = file.read()
+song["autoSaveDuration"] = file.read()
+song["timeSignature"] = file.read()
+song["minutesSpent"] = readInt(file)
+song["leftClicks"] = readInt(file)
+song["rightClicks"] = readInt(file)
+song["blocksAdded"] = readInt(file)
+song["blocksRemoved"] = readInt(file)
+song["originalFile"] = readString(file)
+
+print(song["title"])
+print(song["author"])
+print(song["originalAuthor"])
+print(song["description"])
+print("")
+term.write("0 / "..song["length"].." t")
+
+-- Part 2: the actual song - based on David's own pseudocode
+function printTick(tick)
+  if tick % 5 == 0 then
+    x, y = term.getCursorPos()
+    term.setCursorPos(1, y)
+    term.write(tick.." / "..song["length"].." t")
+  end
+end
+
+song["song"] = {}
+tick = -1
+jumps = 0
+while true do
+  jumps = readShort(file)
+  if jumps == 0 then break -- end of song
+  elseif jumps > 1 then -- if I'm leaving a gap while jumping, fill it in
+    for i = 1, jumps - 1 do
+      t = tick + i
+      song["song"][t] = {} -- fill
+      printTick(t)
+    end
+  end
+  tick = tick + jumps -- jump
+  layer = -1
+  song["song"][tick] = {} -- initialize the tick
+  while true do
+    jumps = readShort(file)
+    if jumps == 0 then break end -- end of tick
+    instrument = instrumentMap[file.read()] -- NBS uses a different instrument value than the game
+    if instrument == nil then instrument = 0 end -- custom instrument? fall back to piano
+    table.insert(song["song"][tick], instrument)
+    note = file.read()
+    if note < 33 then note = 33         -- prevent notes from going out
+    elseif note > 57 then note = 57 end -- of the game's octave limit
+    note = note - 33
+    table.insert(song["song"][tick], note)
+  end
+  
+  printTick(tick)
+end
+
+printTick(song["length"])
+
+print("")
+
+-- Save it
+outFile = fs.open(filename..".sng", "w")
+outFile.write(textutils.serialize(song))
+outFile.close()

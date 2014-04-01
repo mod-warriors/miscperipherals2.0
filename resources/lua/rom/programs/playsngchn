@@ -1,0 +1,62 @@
+-- Same as playsng but uses one note block per channel.
+
+-- Load API
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+-- Parse arguments
+args = {...}
+if #args < 1 then
+  print("Usage: playsngchn filename")
+  print("Plays a .sng file converted using convertnbs using one note block per channel.")
+  return
+end
+
+-- Get file
+filename = table.concat(args, " ")
+file = fs.open(filename, "r")
+if not file then
+  print("File not found: "..filename)
+  return
+end
+
+-- Load song
+song = textutils.unserialize(file.readAll())
+
+if song["title"] == nil then
+  error("Invalid song file")
+end
+
+-- Get note blocks (has to be late due to channels)
+channels = song["height"]
+noteBlocks, noteBlockSides = miscperipheralsutil.getPeripherals("note", channels)
+if #noteBlocks < channels then
+  print("Not enough Iron Note Block peripherals found ("..tostring(channels).." required)")
+  return
+end
+
+-- Continue loading
+print(song["title"])
+print(song["author"])
+print(song["originalAuthor"])
+print(song["description"])
+print("")
+term.write("0 / "..song["length"].." t")
+
+print("Using Iron Note Block peripherals on "..table.concat(noteBlockSides, ", "))
+print("")
+
+-- Play song
+for i = 1, #song["song"] do
+  for j = 1, #song["song"][i], 2 do
+    noteBlocks[j].playNote(song["song"][i][j], song["song"][i][j + 1])
+  end
+  sleep(song["interval"])
+  
+  if i % 5 == 0 then
+    x, y = term.getCursorPos()
+    term.setCursorPos(1, y)
+    term.write(i.." / "..song["length"].." t")
+  end
+end
+
+print("")

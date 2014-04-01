@@ -1,0 +1,28 @@
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+args = {...}
+if #args < 1 then
+  print("Usage: wrpulse frequency")
+  return
+end
+
+frequency = tonumber(args[1])
+if frequency == nil or frequency < 1 or frequency > 5000 then
+  print("Invalid frequency number")
+  return
+end
+
+rether, retherSide = miscperipheralsutil.getPeripheral("wirelessRedstone")
+if rether == nil then
+  print("No REther peripheral found")
+  return
+end
+
+print("Using REther peripheral on "..retherSide)
+
+rether.setFreq(frequency)
+rether.set(true)
+sleep(0.1)
+rether.set(false)
+
+print("Pulsed on frequency "..frequency)

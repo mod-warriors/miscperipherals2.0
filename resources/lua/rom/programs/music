@@ -1,0 +1,27 @@
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+note, noteSide = miscperipheralsutil.getPeripheral("note")
+if note == nil then
+  print("No Note peripheral found")
+  return
+end
+
+if note == nil then
+  print("No Iron Note Block peripheral found")
+  return
+end
+
+print("Using Iron Note Block peripheral on "..noteSide)
+print("Press any key to stop")
+
+parallel.waitForAny(
+  function()
+    while true do
+      note.playNote(math.random(0, 4), math.random(0, 24))
+      sleep(0.25)
+    end
+  end,
+  function()
+    os.pullEvent("char")
+  end
+)

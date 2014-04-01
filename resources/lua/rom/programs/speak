@@ -1,0 +1,17 @@
+os.loadAPI("rom/apis/miscperipheralsutil")
+
+speaker, speakerSide = miscperipheralsutil.getPeripheral("speaker")
+if speaker == nil then
+  print("No Speaker peripheral found")
+  return
+end
+
+print("Using Speaker peripheral on "..speakerSide)
+print("Press ENTER (empty line) to exit")
+print("")
+
+while true do
+  line = io.read()
+  if line == "" then break end
+  speaker.speak(line)
+end
