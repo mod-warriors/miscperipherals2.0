@@ -5,10 +5,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import appeng.api.WorldCoord;
 import appeng.api.me.tiles.IGridTileEntity;
 
-/**
- * A Tile has been added to the world, and should be evaluated for Network Connectivity.
- */
-public class GridTileLoadEvent extends AEWorldEvent {
+public class GridTileLoadEvent extends WorldEvent {
 	
 	public WorldCoord coord;
 	public IGridTileEntity te;

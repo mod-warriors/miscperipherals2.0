@@ -1,11 +1,9 @@
 package ic2.api.energy.tile;
 
-import net.minecraftforge.common.ForgeDirection;
+import ic2.api.Direction;
 
 /**
  * Allows a tile entity (mostly a machine) to receive energy.
- * 
- * See ic2/api/energy/usage.txt for an overall description of the energy net api.
  */
 public interface IEnergySink extends IEnergyAcceptor {
 	/**
@@ -17,19 +15,16 @@ public interface IEnergySink extends IEnergyAcceptor {
 	 *
 	 * @return max accepted input in eu
 	 */
-	double demandedEnergyUnits();
+	int demandsEnergy();
 
 	/**
 	 * Transfer energy to the sink.
-	 * 
-	 * It's highly recommended to accept all energy by letting the internal buffer overflow to
-	 * increase the performance and accuracy of the distribution simulation.
 	 *
 	 * @param directionFrom direction from which the energy comes from
 	 * @param amount energy to be transferred
 	 * @return Energy not consumed (leftover)
 	 */
-	double injectEnergyUnits(ForgeDirection directionFrom, double amount);
+	int injectEnergy(Direction directionFrom, int amount);
 
 	/**
 	 * Determine the amount of eu which can be safely injected into the specific energy sink without exploding.

@@ -6,9 +6,9 @@ import appeng.api.WorldCoord;
 import appeng.api.me.util.IGridInterface;
 
 /**
- * Posted when storage options in a AE Network update, such as a new Storage Bus or Cell is added, or removed.
+ * Posted when crafting options in a AE Network update.
  */
-public class GridStorageUpdateEvent extends AEWorldEvent {
+public class GridStorageUpdateEvent extends WorldEvent {
 	
 	final public WorldCoord coord;
 	final public IGridInterface grid;

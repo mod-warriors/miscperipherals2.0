@@ -5,10 +5,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import appeng.api.WorldCoord;
 import appeng.api.me.tiles.IGridTileEntity;
 
-/**
- * A Tile has been removed from the world, and should no longer be considered for connectivity.
- */
-public class GridTileUnloadEvent extends AEWorldEvent {
+public class GridTileUnloadEvent extends WorldEvent {
 	
 	public WorldCoord coord;
 	public IGridTileEntity te;

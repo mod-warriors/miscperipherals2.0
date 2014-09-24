@@ -3,9 +3,6 @@ package appeng.api.events;
 import net.minecraftforge.event.Event;
 import appeng.api.me.tiles.ILocateable;
 
-/**
- * Used to Notify the Location Registry of objects, and their availability.
- */
 public class LocateableEventAnnounce extends Event {
 	
 	public enum LocateableEvent {

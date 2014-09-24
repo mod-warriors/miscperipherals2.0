@@ -6,12 +6,12 @@ import appeng.api.WorldCoord;
 import appeng.api.me.util.IGridInterface;
 
 /**
- * Posted when crafting options in a AE Network update, you can watch for them if you want to.
+ * Posted when crafting options in a AE Network update.
  */
-public class GridPatternUpdateEvent extends AEWorldEvent {
+public class GridPatternUpdateEvent extends WorldEvent {
 	
-	final public WorldCoord coord;
-	final public IGridInterface grid;
+	public WorldCoord coord;
+	public IGridInterface grid;
 	
 	public GridPatternUpdateEvent(World world, WorldCoord wc, IGridInterface gi ) {
 		super(world);

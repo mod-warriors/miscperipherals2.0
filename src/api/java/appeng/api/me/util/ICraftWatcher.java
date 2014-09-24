@@ -1,9 +1,5 @@
 package appeng.api.me.util;
 
-/**
- * Not used.
- *
- */
 public interface ICraftWatcher {
 	
 	void markChainCrafted();

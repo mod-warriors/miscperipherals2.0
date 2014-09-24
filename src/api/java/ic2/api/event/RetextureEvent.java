@@ -1,7 +1,6 @@
 package ic2.api.event;
 
 import net.minecraft.world.World;
-
 import net.minecraftforge.event.Cancelable;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -21,15 +20,15 @@ public class RetextureEvent extends WorldEvent {
 	// set to true to confirm the operation
 	public boolean applied = false;
 
-	public RetextureEvent(World world1, int x1, int y1, int z1, int side1, int referencedBlockId1, int referencedMeta1, int referencedSide1) {
-		super(world1);
+	public RetextureEvent(World world, int x, int y, int z, int side, int referencedBlockId, int referencedMeta, int referencedSide) {
+		super(world);
 
-		this.x = x1;
-		this.y = y1;
-		this.z = z1;
-		this.side = side1;
-		this.referencedBlockId = referencedBlockId1;
-		this.referencedMeta = referencedMeta1;
-		this.referencedSide = referencedSide1;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.side = side;
+		this.referencedBlockId = referencedBlockId;
+		this.referencedMeta = referencedMeta;
+		this.referencedSide = referencedSide;
 	}
 }
