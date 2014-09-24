@@ -26,8 +26,8 @@ buildProps.withReader {
 }
 
 version = "${config.version.minecraft}-${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}.${System.getenv().BUILD_NUMBER}"
-group= "notenoughkeys"
-archivesBaseName = "NotEnoughKeys"
+group= "miscperipherals2.0"
+archivesBaseName = "miscperipherals2.0"
 
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
