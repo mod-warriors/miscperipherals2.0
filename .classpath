@@ -6,6 +6,7 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/api/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/net.industrial-craft/industrialcraft-2/2.2.632-experimental/2fe769a719412fa8f8cfd3898a376342af85421b/industrialcraft-2-2.2.632-experimental-dev.jar" exported="true"/>
 	<classpathentry sourcepath="C:/Users/Admin/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.1.1217/snapshot/20140918/forgeSrc-1.7.10-10.13.1.1217-sources.jar" kind="lib" path="C:/Users/Admin/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.1.1217/snapshot/20140918/forgeSrc-1.7.10-10.13.1.1217.jar" exported="true"/>
 	<classpathentry kind="lib" path="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/net.minecraft/launchwrapper/1.11/9c0592c6e1e9ea296a70948081bd4cc84dda1289/launchwrapper-1.11.jar" exported="true"/>
 	<classpathentry kind="lib" path="C:/Users/Admin/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar" exported="true"/>
@@ -215,5 +216,9 @@
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.3.2/43ffe692648166363bceadc63ac76c7d19b4ebd7/commons-lang3-3.3.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Admin/Desktop/Minecraft/forge/1.7.2/DevEnvironment/miscperipherals2.0/unresolved dependency -  CodeChickenLib 1.7.10-[ ]" exported="true"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/Desktop/Minecraft/forge/1.7.2/DevEnvironment/miscperipherals2.0/unresolved dependency -  ForgeMultipart 1.7.10-[ ]" exported="true"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/Desktop/Minecraft/forge/1.7.2/DevEnvironment/miscperipherals2.0/unresolved dependency -  NotEnoughItems  " exported="true"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/Desktop/Minecraft/forge/1.7.2/DevEnvironment/miscperipherals2.0/unresolved dependency -  CodeChickenCore  " exported="true"/>
 	<classpathentry kind="lib" path="C:/Users/Admin/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.1.1217/start" exported="true"/>
 </classpath>
