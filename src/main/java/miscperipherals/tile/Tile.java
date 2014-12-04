@@ -1,19 +1,16 @@
 package miscperipherals.tile;
 
+import io.netty.buffer.ByteBuf;
 import miscperipherals.core.MiscPeripherals;
 import miscperipherals.network.NetworkHelper;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraft.util.Facing;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
+import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class Tile extends TileEntity implements IEntityAdditionalSpawnData {
@@ -77,7 +74,7 @@ public class Tile extends TileEntity implements IEntityAdditionalSpawnData {
 	}
 	
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeByte(facing);
 		
 		data.writeByte(
@@ -91,7 +88,7 @@ public class Tile extends TileEntity implements IEntityAdditionalSpawnData {
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		setFacing(data.readByte());
 		
 		byte flags = data.readByte();
@@ -144,7 +141,7 @@ public class Tile extends TileEntity implements IEntityAdditionalSpawnData {
 		return true;
 	}
 
-	public void onPlaced(World world, int x, int y, int z, EntityLiving entity, ItemStack stack) {
+	public void onPlaced(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
 		if (stack.hasDisplayName()) {
 			displayName = stack.getDisplayName();
 		}

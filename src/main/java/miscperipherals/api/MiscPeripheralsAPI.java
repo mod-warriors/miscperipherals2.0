@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidStack;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 
 /**
@@ -64,7 +64,7 @@ public abstract class MiscPeripheralsAPI {
 	 * @param liquid Liquid
 	 * @param xp XP points given by that liquid stack
 	 */
-	public abstract void addLiquidXP(LiquidStack liquid, int xp);
+	public abstract void addLiquidXP(FluidStack liquid, int xp);
 	
 	/**
 	 * Encode an item stack into an item UUID.
@@ -80,7 +80,7 @@ public abstract class MiscPeripheralsAPI {
 	 * @param stack Stack to encode
 	 * @return UUID
 	 */
-	public abstract int getUUID(LiquidStack stack);
+	public abstract int getUUID(FluidStack stack);
 	
 	/**
 	 * Register an upgrade implementing {@link IUpgradeIcons} or {@link IUpgradeToolIcons} to receive icons.

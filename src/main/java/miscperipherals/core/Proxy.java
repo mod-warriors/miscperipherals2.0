@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class Proxy {
@@ -36,7 +36,7 @@ public class Proxy {
 		return 0;
 	}
 	
-	public Icon getIcon(Object o) {
+	public IIcon getIcon(Object o) {
 		return null;
 	}
 

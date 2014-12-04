@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -69,7 +70,7 @@ public class PeripheralXP implements IHostedPeripheral {
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
 		switch (method) {
 			case 0: {
-				ItemStack slot = turtle.getSlotContents(turtle.getSelectedSlot());
+				ItemStack slot = turtle.getInventory().getStackInSlot(turtle.getSelectedSlot());
 				int amount = Integer.MAX_VALUE;
 				if (arguments.length > 0) {
 					if (!(arguments[0] instanceof Double)) throw new Exception("bad argument #1 (expected number)");
@@ -80,12 +81,12 @@ public class PeripheralXP implements IHostedPeripheral {
 				amount = Math.min(amount, slot.stackSize);
 				
 				int recharge = 0;
-				if (slot.itemID == Item.expBottle.itemID) {
+				if (slot.getItem() == Items.experience_bottle) {
 					recharge = 3 + random.nextInt(5) + random.nextInt(5);
-				} else if (slot.itemID == Item.monsterPlacer.itemID) {
+				} else if (slot.getItem() == Items.spawn_egg) {
 					Entity ent = EntityList.createEntityByID(slot.getItemDamage(), turtle.getWorld());
 					if (ent instanceof EntityLiving) {
-						recharge = ((EntityLiving)ent).experienceValue;
+						recharge = ((EntityLiving)ent). ;
 					}
 				}
 				
