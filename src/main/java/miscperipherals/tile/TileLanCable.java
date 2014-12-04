@@ -1,7 +1,8 @@
 package miscperipherals.tile;
 
+import io.netty.buffer.ByteBuf;
 import miscperipherals.network.NetworkHelper;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -20,12 +21,12 @@ public class TileLanCable extends TileEntity implements IEntityAdditionalSpawnDa
 	}
 	
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeByte(type);
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		type = data.readByte();
 		
 		if (worldObj != null) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -52,4 +53,6 @@ public class TileLanCable extends TileEntity implements IEntityAdditionalSpawnDa
 	public float getThickness() {
 		return 0.4F;
 	}
+
+
 }

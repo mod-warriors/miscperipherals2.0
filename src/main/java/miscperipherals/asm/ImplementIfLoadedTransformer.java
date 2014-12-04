@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.launchwrapper.IClassTransformer;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -11,7 +13,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class ImplementIfLoadedTransformer implements IClassTransformer {
 	@Override

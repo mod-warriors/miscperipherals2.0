@@ -13,11 +13,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -33,28 +34,28 @@ public class BlockLanCable extends BlockContainer {
 		}
 	});
 	
-	public BlockLanCable(int id) {
-		super(id, Material.rock);
+	public BlockLanCable() {
+		super(Material.rock);
 		setLightOpacity(0);
 		setCreativeTab(MiscPeripherals.instance.tabMiscPeripherals);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1) {
+	public TileEntity createNewTileEntity(World var1,int var2) {
 		return new TileLanCable();
 	}
 	
 	@Override
 	public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te.getClass() == TileLanCable.class)) return;
 		
 		((TileLanCable)te).setType(meta);
-		world.markBlockForRenderUpdate(x, y, z);
+		world.markBlockForUpdate(x, y, z);
 	}
 	
 	@Override
-	public void getSubBlocks(int id, CreativeTabs tabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tabs, List list) {
 		for (Integer type : types.keySet()) {
 			list.add(new ItemStack(this, 1, type));
 		}
@@ -76,19 +77,19 @@ public class BlockLanCable extends BlockContainer {
 	}
 	
 	@Override
-	public boolean isBlockNormalCube(World world, int x, int y, int z) {
+	public boolean isBlockNormalCube() {
 		return false;
 	}
 	
 	@Override
-	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te.getClass() == TileLanCable.class)) return types.get(0).sprite;
 		return types.get(((TileLanCable)te).getType()).sprite;
 	}
 	
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z, int meta) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te.getClass() == TileLanCable.class)) return null;
 		
     	double halfThickness = ((TileLanCable)te).getThickness();
@@ -107,8 +108,8 @@ public class BlockLanCable extends BlockContainer {
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te == null || !(te.getClass() == TileLanCable.class)) return new ArrayList<ItemStack>(0);
 		
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>(1);
@@ -117,7 +118,7 @@ public class BlockLanCable extends BlockContainer {
 	}
 	
 	public AxisAlignedBB getCommonBoundingBoxFromPool(World world, int x, int y, int z, boolean selectionBoundingBox) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te == null || !(te.getClass() == TileLanCable.class)) return null;
 		TileLanCable cable = (TileLanCable)te;
 		
@@ -130,12 +131,12 @@ public class BlockLanCable extends BlockContainer {
 		double maxY = y + 0.5d + halfThickness;
 		double maxZ = z + 0.5d + halfThickness;
 		
-		if (cable.canInteractWith(world.getBlockTileEntity(x-1, y, z))) minX = x;
-		if (cable.canInteractWith(world.getBlockTileEntity(x, y-1, z))) minY = y;
-		if (cable.canInteractWith(world.getBlockTileEntity(x, y, z-1))) minZ = z;
-		if (cable.canInteractWith(world.getBlockTileEntity(x+1, y, z))) maxX = x + 1;
-		if (cable.canInteractWith(world.getBlockTileEntity(x, y+1, z))) maxY = y + 1;
-		if (cable.canInteractWith(world.getBlockTileEntity(x, y, z+1))) maxZ = z + 1;
+		if (cable.canInteractWith(world.getTileEntity(x-1, y, z))) minX = x;
+		if (cable.canInteractWith(world.getTileEntity(x, y-1, z))) minY = y;
+		if (cable.canInteractWith(world.getTileEntity(x, y, z-1))) minZ = z;
+		if (cable.canInteractWith(world.getTileEntity(x+1, y, z))) maxX = x + 1;
+		if (cable.canInteractWith(world.getTileEntity(x, y+1, z))) maxY = y + 1;
+		if (cable.canInteractWith(world.getTileEntity(x, y, z+1))) maxZ = z + 1;
 
 		return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
 	}
@@ -151,13 +152,13 @@ public class BlockLanCable extends BlockContainer {
 	public static class CableType {
 		public final int id;
 		public final String name;
-		public Icon sprite;
+		public IIcon sprite;
 		
 		public final double cps;
 		public final boolean state;
 		public final boolean redstone;
 		
-		public CableType(int id, String name, Icon sprite, double cps, boolean state, boolean redstone) {
+		public CableType(int id, String name, IIcon sprite, double cps, boolean state, boolean redstone) {
 			this.id = id;
 			String localName = Util.camelCase(name);
 			LanguageRegistry.instance().addStringLocalization("miscperipherals.lanCable."+localName+".name", name+" LAN Cable");
@@ -171,22 +172,22 @@ public class BlockLanCable extends BlockContainer {
 		
 		public CableType addRecipe(String mat) {
 			Object arg = mat;
-			if (mat.equals("ingotIron")) arg = Item.ingotIron;
-			else if (mat.equals("ingotGold")) arg = Item.ingotGold;
+			if (mat.equals("ingotIron")) arg = Items.iron_ingot;
+			else if (mat.equals("ingotGold")) arg = Items.gold_ingot;
 			
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MiscPeripherals.instance.blockLanCable, 8, id), " R ", "*R*", " R ", 'R', Item.redstone, '*', arg));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MiscPeripherals.instance.blockLanCable, 8, id), " R ", "*R*", " R ", 'R', Items.redstone, '*', arg));
 			return this;
 		}
 		
 		public CableType setOreDictTexture(String ore, ItemStack fallback) {
 			for (ItemStack stack : OreDictionary.getOres(ore)) {
-				if (stack.itemID > 0 && stack.itemID < Block.blocksList.length) {
-					sprite = Block.blocksList[stack.itemID].getIcon(3, stack.getItemDamage());
+				if (stack.getItem() !=null) {
+					sprite = stack.getIconIndex();
 					return this;
 				}
 			}
 			
-			sprite = Block.blocksList[fallback.itemID].getIcon(3, fallback.getItemDamage());
+			sprite = fallback.getIconIndex();
 			return this;
 		}
 	}

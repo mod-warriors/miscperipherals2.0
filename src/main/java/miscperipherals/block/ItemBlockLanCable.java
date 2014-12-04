@@ -1,16 +1,17 @@
 package miscperipherals.block;
 
 import miscperipherals.block.BlockLanCable.CableType;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockLanCable extends ItemBlock {
-	public ItemBlockLanCable(int id) {
-		super(id);
+	public ItemBlockLanCable(Block block) {
+		super(block);
 	}
 	
 	@Override
-	public String getItemDisplayName(ItemStack stack) {
+	public String getItemStackDisplayName(ItemStack stack) {
 		int meta = stack.getItemDamage();
 		CableType type = BlockLanCable.types.get(meta);
 		if (type == null) return "[Invalid Cable Type]";

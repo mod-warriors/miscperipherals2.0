@@ -13,7 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidStack;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 
 public class APICallHandler extends MiscPeripheralsAPI {	
@@ -49,7 +49,7 @@ public class APICallHandler extends MiscPeripheralsAPI {
 	}
 
 	@Override
-	public void addLiquidXP(LiquidStack liquid, int xp) {
+	public void addLiquidXP(FluidStack liquid, int xp) {
 		PeripheralXP.LiquidXPSource.liquids.put(liquid, xp);
 	}
 

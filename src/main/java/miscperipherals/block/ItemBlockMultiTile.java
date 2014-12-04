@@ -12,14 +12,14 @@ import net.minecraft.util.StatCollector;
 public class ItemBlockMultiTile extends ItemBlock {
 	private final BlockMultiTile block;
 	
-	public ItemBlockMultiTile(int id) {
-		super(id);
+	public ItemBlockMultiTile(Block blockinit) {
+		super(blockinit);
 		setMaxDamage(0);
 		setHasSubtypes(true);
 		
-		if (Block.blocksList[id + 256] instanceof BlockMultiTile) {
-			block = (BlockMultiTile)Block.blocksList[id + 256];
-		} else throw new IllegalArgumentException("Not assigned to a multi-tile block, assigned to "+Block.blocksList[id + 256]+" ["+(id + 256)+"]");
+		if (blockinit instanceof BlockMultiTile) {
+			block = (BlockMultiTile)blockinit;
+		} else throw new IllegalArgumentException("Not assigned to a multi-tile block, assigned to "+blockinit+" ["+blockinit+"]");
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class ItemBlockMultiTile extends ItemBlock {
 	}
 	
 	@Override
-	public String getItemDisplayName(ItemStack stack) {
+	public String getItemStackDisplayName(ItemStack stack) {
 		int meta = stack.getItemDamage();
 		if (block.data[meta] == null) return "[Invalid Block]";
 		else return StatCollector.translateToLocal("miscperipherals."+block.data[stack.getItemDamage()].name+".name");

@@ -1,6 +1,6 @@
 package miscperipherals.api;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -18,5 +18,5 @@ public interface IUpgradeIcons {
 	 * @param reg Icon registry
 	 */
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister reg);
+	public void registerIcons(IIconRegister reg);
 }

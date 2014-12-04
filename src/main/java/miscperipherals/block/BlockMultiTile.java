@@ -9,22 +9,23 @@ import miscperipherals.tile.Tile;
 import miscperipherals.util.Util;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.google.common.base.Objects;
 
@@ -40,12 +41,12 @@ public class BlockMultiTile extends BlockContainer {
 	 * 5 = x+ south
 	 */
 	private static final int[][] SIDE_OFFSETS = {{3,2,0,1,5,4},{2,3,0,1,5,4},{0,1,3,2,5,4},{0,1,2,3,4,5},{0,1,4,5,3,2},{0,1,5,4,2,3}};
-	public static Icon GENERIC = null;
+	public static IIcon GENERIC = null;
 	
 	public TileData[] data = new TileData[META_VALUES];
 	
 	public BlockMultiTile(int id) {
-		super(id, Material.rock);
+		super(Material.rock);
 		setHardness(3.0F);
 		setResistance(10.0F);
 		
@@ -53,7 +54,7 @@ public class BlockMultiTile extends BlockContainer {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world,int var2) {
 		return null;
 	}
 	
@@ -69,10 +70,10 @@ public class BlockMultiTile extends BlockContainer {
 	}
 	
 	@Override
-	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (data[meta] == null) return GENERIC;
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te instanceof Tile)) return data[meta].sprites[SIDE_OFFSETS[3][side]];
 		
 		Tile tile = (Tile)te;
@@ -81,14 +82,14 @@ public class BlockMultiTile extends BlockContainer {
 	}
 	
 	@Override
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return meta >= 0 && meta < data.length && data[meta] != null ? data[meta].sprites[SIDE_OFFSETS[3][side >= 0 && side < 6 ? side : 0]] : GENERIC;
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity, ItemStack stack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
 		if (!world.isRemote && entity != null) {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			
 			if (te instanceof Tile) {
 				Tile tile = (Tile) te;
@@ -111,7 +112,7 @@ public class BlockMultiTile extends BlockContainer {
 	}
 	
 	@Override
-	public void getSubBlocks(int id, CreativeTabs tabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tabs, List list) {
 		for (int meta = 0; meta < data.length; meta++) {
 			if (data[meta] != null) list.add(new ItemStack(this, 1, meta));
 		}
@@ -122,7 +123,7 @@ public class BlockMultiTile extends BlockContainer {
 		if (world.isRemote) return true;
 		if (player.isSneaking()) return false;
 		
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te instanceof Tile)) return false;
 		
 		Tile tile = (Tile)te;
@@ -135,13 +136,13 @@ public class BlockMultiTile extends BlockContainer {
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList();
 		ItemStack stack = new ItemStack(this, 1, metadata);
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof Tile) {
 			Tile tile = (Tile) te;
-			if (tile.displayName != null) stack.setItemName(tile.displayName);
+			if (tile.displayName != null) stack.setStackDisplayName(tile.displayName);
 		}
 		ret.add(stack);
 		return ret;
@@ -153,7 +154,7 @@ public class BlockMultiTile extends BlockContainer {
 	}
 	
 	public void breakBlock(World world, int x, int y, int z, int a, int b) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory) {
 			IInventory inv = (IInventory)te;
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -170,7 +171,7 @@ public class BlockMultiTile extends BlockContainer {
                         if (var13 > stack.stackSize) var13 = stack.stackSize;
 
                         stack.stackSize -= var13;
-                        var14 = new EntityItem(world, (double)((float)x + var10), (double)((float)y + var11), (double)((float)z + var12), new ItemStack(stack.itemID, var13, stack.getItemDamage()));
+                        var14 = new EntityItem(world, (double)((float)x + var10), (double)((float)y + var11), (double)((float)z + var12), new ItemStack(stack.getItem(), var13, stack.getItemDamage()));
                         float var15 = 0.05F;
                         var14.motionX = (double)((float)world.rand.nextGaussian() * var15);
                         var14.motionY = (double)((float)world.rand.nextGaussian() * var15 + 0.2F);
@@ -184,17 +185,17 @@ public class BlockMultiTile extends BlockContainer {
 			}
 		}
 		
-		world.removeBlockTileEntity(x, y, z);
+		world.removeTileEntity(x, y, z);
 	}
 	
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion) {
 		super.onBlockDestroyedByExplosion(world, x, y, z, explosion);
-		world.removeBlockTileEntity(x, y, z);
+		world.removeTileEntity(x, y, z);
 	}
 	
 	@Override
-	public void registerIcons(IconRegister reg) {
+	public void registerBlockIcons(IIconRegister reg) {
 		GENERIC = reg.registerIcon("MiscPeripherals:generic");
 		
 		for (int i = 0; i < META_VALUES; i++) {
@@ -229,7 +230,7 @@ public class BlockMultiTile extends BlockContainer {
 			case All: {}
 		}
 		
-		TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+		TileEntity te = worldObj.getTileEntity(x, y, z);
 		if (!(te instanceof Tile)) return false;
 		
 		((Tile) te).setFacing(axis.ordinal());
@@ -244,13 +245,13 @@ public class BlockMultiTile extends BlockContainer {
 	
 	@Override
 	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te instanceof Tile)) return 0;
 		else return ((Tile) te).getRedstone(Util.OPPOSITE[side]);
 	}
 	
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 	
@@ -261,7 +262,7 @@ public class BlockMultiTile extends BlockContainer {
 	
 	@Override
 	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (!(te instanceof Tile)) return 0;
 		else return ((Tile) te).getComparator(side);
 	}
@@ -285,8 +286,8 @@ public class BlockMultiTile extends BlockContainer {
 	public static class TileData {
 		public final int meta;
 		public Class<? extends Tile> clazz;
-		public Icon[] sprites = new Icon[6];
-		public Icon[] activeSprites = new Icon[6];
+		public IIcon[] sprites = new IIcon[6];
+		public IIcon[] activeSprites = new IIcon[6];
 		public String name;
 		public FacingMode facingMode = FacingMode.None;
 		public String[] infoText = new String[0];
