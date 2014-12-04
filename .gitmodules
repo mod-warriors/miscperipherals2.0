@@ -7,6 +7,3 @@
 [submodule "src/api/java/mods/railcraft/api"]
 	path = src/api/java/mods/railcraft/api
 	url = https://github.com/CovertJaguar/Railcraft-API.git
-[submodule "src/api/java/mods/buildcraft/api"]
-	path = src/api/java/mods/buildcraft/api
-	url = https://github.com/BuildCraft/BuildCraft.git

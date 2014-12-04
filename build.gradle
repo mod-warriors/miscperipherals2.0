@@ -73,8 +73,9 @@ dependencies
     compile name: 'CodeChickenCore', version: "${config.version.cccore}", ext: 'jar'
     compile "net.industrial-craft:industrialcraft-2:${config.version.ic2}:dev"
     //compile "net:sengir:forestry:forestry_1.7.10:${config.version.forestry}:dev"
-
+    compile 'com.mod-buildcraft:buildcraft:6.1.+:dev'
 }
+
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
