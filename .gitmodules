@@ -4,3 +4,6 @@
 [submodule "src/api/java/mods/railcraft/api"]
 	path = src/api/java/mods/railcraft/api
 	url = https://github.com/CovertJaguar/Railcraft-API.git
+[submodule "src/api/java/appeng/api"]
+	path = src/api/java/appeng/api
+	url = https://github.com/AppliedEnergistics/Applied-Energistics-2-API.git
